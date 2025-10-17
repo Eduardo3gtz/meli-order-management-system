@@ -1,0 +1,120 @@
+{
+	"info": {
+		"_postman_id": "493441ef-22ef-4f68-be2b-8800f14f5476",
+		"name": "Reto 5",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12170947",
+		"_collection_link": "https://winter-meadow-5557.postman.co/workspace/technoready~6e9e22be-4042-47b9-9634-06b764423ea4/collection/12170947-493441ef-22ef-4f68-be2b-8800f14f5476?action=share&source=collection_link&creator=12170947"
+	},
+	"item": [
+		{
+			"name": "list",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/orders",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"customerName\": \"Arturo Bandini\",\r\n    \"status\": \"Pending\",\r\n    \"totalAmount\": 150.75\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/orders",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "upd",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Super Tacos Perros\",\r\n  \"rating\": 5.0\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/restaurants/68e692ee782a4068a0a54aec",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"restaurants",
+						"68e692ee782a4068a0a54aec"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Super Tacos Perros\",\r\n  \"rating\": 5.0\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/restaurants/68e692ee782a4068a0a54aec",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"restaurants",
+						"68e692ee782a4068a0a54aec"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

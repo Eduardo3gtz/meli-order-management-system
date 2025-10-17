@@ -1,0 +1,3 @@
+@echo off
+echo Starting MELI Order Management System...
+call mvnw.cmd spring-boot:run

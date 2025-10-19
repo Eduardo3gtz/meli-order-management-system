@@ -1,62 +1,52 @@
 package com.meli.ordermanagementsystem.controller;
 
 import com.meli.ordermanagementsystem.model.Order;
-import com.meli.ordermanagementsystem.repository.OrderRepository;
+import com.meli.ordermanagementsystem.service.OrderService; // Importamos el servicio
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 /**
  * REST Controller for managing orders.
- * Exposes endpoints for CRUD operations on orders.
+ * Now delegates all business logic to the OrderService.
  */
 @RestController
-@RequestMapping("/api/orders") // Base URL for all endpoints in this controller
+@RequestMapping("/api/orders")
 public class OrderController {
 
-    @Autowired // Spring's magic to inject the OrderRepository instance
-    private OrderRepository orderRepository;
+    // 1. CAMBIAMOS LA INYECCIÓN: Ahora inyectamos el SERVICIO, no el repositorio.
+    @Autowired
+    private OrderService orderService;
+    
 
-    // CREATE a new order
-    @PostMapping
-    public Order createOrder(@RequestBody Order order) {
-        order.setOrderDate(LocalDateTime.now()); // Set the order date on the server
-        return orderRepository.save(order);
+    // 2. MÉTODOS MÁS LIMPIOS: Solo llaman al servicio.
+
+   @PostMapping
+    public Order createOrder(@Valid @RequestBody Order order) { 
+        return orderService.createOrder(order);
     }
 
-    // READ all orders
     @GetMapping
     public List<Order> getAllOrders() {
-        return orderRepository.findAll();
+        return orderService.getAllOrders();
     }
 
-    // READ a single order by ID
     @GetMapping("/{id}")
     public Optional<Order> getOrderById(@PathVariable Long id) {
-        return orderRepository.findById(id);
+        return orderService.getOrderById(id);
     }
 
-    // UPDATE an existing order
-    @PutMapping("/{id}")
-    public Order updateOrder(@PathVariable Long id, @RequestBody Order orderDetails) {
-        Order order = orderRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Order not found with id: " + id));
-
-        order.setCustomerName(orderDetails.getCustomerName());
-        order.setStatus(orderDetails.getStatus());
-        order.setTotalAmount(orderDetails.getTotalAmount());
-        // The order date is not updated intentionally
-
-        return orderRepository.save(order);
+   @PutMapping("/{id}")
+    public Order updateOrder(@PathVariable Long id, @Valid @RequestBody Order orderDetails) { // <--- AÑADIR @Valid
+        return orderService.updateOrder(id, orderDetails);
     }
 
-    // DELETE an order
     @DeleteMapping("/{id}")
     public String deleteOrder(@PathVariable Long id) {
-        orderRepository.deleteById(id);
-        return "Order with ID " + id + " has been deleted successfully.";
+        orderService.deleteOrder(id); // El servicio ya no devuelve un String
+        return "Order with ID " + id + " has been deleted successfully."; // El controlador maneja la respuesta
     }
 }

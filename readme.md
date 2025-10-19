@@ -7,6 +7,8 @@ A robust REST API solution for order management, developed as part of the "Sprin
 - [Overview](#overview)
 - [Tech Stack](#tech-stack)
 - [Features](#features)
+- [Project Architecture](#project-architecture)
+- [API Robustness & Error Handling](#api-robustness--error-handling)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
@@ -29,6 +31,7 @@ The MELI Order Management System is a Spring Boot application that provides a co
 - **Maven** - Dependency management and build tool
 - **Spring Web** - RESTful web services
 - **Spring Data JPA** - Data persistence layer
+- **Spring Boot Validation** - Input validation and constraint enforcement
 - **H2 Database** - In-memory database for development
 - **Lombok** - Code generation and boilerplate reduction
 
@@ -42,6 +45,73 @@ The MELI Order Management System is a Spring Boot application that provides a co
 - ✅ H2 in-memory database integration
 - ✅ Version control with Git and GitHub repository
 - ✅ Startup scripts for quick deployment
+- ✅ Three-layer architecture (Controller-Service-Repository)
+- ✅ Input validation with Jakarta Bean Validation
+- ✅ Global exception handling with standardized error responses
+
+## Project Architecture
+
+The application follows a **three-layer architecture pattern** that separates concerns and promotes code maintainability:
+
+```
+┌─────────────────────────────────────────┐
+│         Controller Layer                │
+│  (Handles HTTP Requests/Responses)      │
+│         OrderController                 │
+└──────────────┬──────────────────────────┘
+               │
+               ↓
+┌─────────────────────────────────────────┐
+│          Service Layer                  │
+│    (Business Logic & Validation)        │
+│          OrderService                   │
+└──────────────┬──────────────────────────┘
+               │
+               ↓
+┌─────────────────────────────────────────┐
+│        Repository Layer                 │
+│      (Data Access & Persistence)        │
+│        OrderRepository                  │
+└─────────────────────────────────────────┘
+```
+
+### Benefits of This Architecture:
+
+- **Separation of Concerns (SoC):** Each layer has a distinct responsibility:
+  - **Controller Layer:** Manages HTTP requests and responses, delegates business operations to the service layer
+  - **Service Layer:** Contains all business logic, orchestrates operations, and enforces business rules
+  - **Repository Layer:** Handles data persistence and retrieval using Spring Data JPA
+
+- **Better Maintainability:** Changes in one layer don't cascade to others, making the codebase easier to modify and extend
+
+- **Enhanced Testability:** Business logic in the service layer can be unit tested independently without requiring HTTP context or database connections
+
+- **Scalability:** New features can be added by extending the appropriate layer without affecting the entire application
+
+## API Robustness & Error Handling
+
+The API implements comprehensive validation and error handling mechanisms to ensure data integrity and provide clear feedback to clients:
+
+### Input Validation
+
+The application uses **Jakarta Bean Validation** (`jakarta.validation`) to automatically validate incoming request payloads:
+
+- **`@Valid`** annotation triggers automatic validation on request bodies
+- **`@NotBlank`** ensures string fields are not null or empty (e.g., `customerName`, `status`)
+- **`@Positive`** validates that numeric fields contain positive values (e.g., `totalAmount`)
+
+Invalid requests are automatically rejected with a `400 Bad Request` response before reaching the business logic layer.
+
+### Global Exception Handling
+
+A **`@RestControllerAdvice`** component (`GlobalExceptionHandler`) provides centralized exception handling across the entire application:
+
+- **Catches validation errors** from `@Valid` annotations automatically
+- **Returns structured JSON error responses** instead of generic HTML error pages
+- **Provides field-level error details** to help clients understand exactly what went wrong
+- **Prevents 500 Internal Server Errors** caused by validation issues
+
+This approach ensures consistent, predictable error responses and improves the API's developer experience.
 
 ## Getting Started
 
@@ -143,6 +213,15 @@ The application will start and be accessible at: **http://localhost:8080**
     "createdAt": "2025-10-16T11:45:00"
   }
 ]
+```
+
+**Error Response (400 Bad Request):**
+```json
+{
+  "totalAmount": "Total amount cannot be null",
+  "customerName": "Customer name cannot be blank",
+  "status": "Status cannot be blank"
+}
 ```
 
 ## Database Access

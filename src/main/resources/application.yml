@@ -1,0 +1,11 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: order-management-system
+
+  # Perfil por defecto
+  # Le decimos a Spring que si no le especificamos un perfil, active el de "dev"
+  profiles:
+    active: dev

@@ -13,6 +13,8 @@ A robust REST API solution for order management, developed as part of the "Sprin
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
   - [Running the Application](#running-the-application)
+    - [Development (Default)](#development-default)
+    - [Production](#production)
 - [API Documentation](#api-documentation)
 - [Database Access](#database-access)
 - [Testing with Postman](#testing-with-postman)
@@ -22,7 +24,7 @@ A robust REST API solution for order management, developed as part of the "Sprin
 
 The MELI Order Management System is a Spring Boot application that provides a complete RESTful API for managing orders. Built with modern Java technologies and best practices, this system offers full CRUD operations with persistent data storage.
 
-**Current Version:** Sprint 1 - Core Implementation
+**Current Version:** Sprint 2 - Multi-Environment Configuration
 
 ## Tech Stack
 
@@ -33,6 +35,8 @@ The MELI Order Management System is a Spring Boot application that provides a co
 - **Spring Data JPA** - Data persistence layer
 - **Spring Boot Validation** - Input validation and constraint enforcement
 - **H2 Database** - In-memory database for development
+- **PostgreSQL** - Relational database for production
+- **YAML Configuration** - Environment profile management with `.yml` files
 - **Lombok** - Code generation and boilerplate reduction
 
 ## Features
@@ -48,6 +52,13 @@ The MELI Order Management System is a Spring Boot application that provides a co
 - ✅ Three-layer architecture (Controller-Service-Repository)
 - ✅ Input validation with Jakarta Bean Validation
 - ✅ Global exception handling with standardized error responses
+
+**Sprint 2 Completed:**
+
+- ✅ Environment profile configuration (development and production)
+- ✅ PostgreSQL database integration for production environment
+- ✅ YAML-based configuration management
+- ✅ Environment variable support for secure credential handling
 
 ## Project Architecture
 
@@ -122,6 +133,7 @@ Ensure you have the following installed on your system:
 - **JDK 17** or higher
 - **Git** for version control
 - **Maven** (optional, wrapper included in project)
+- **PostgreSQL** (only for production environment)
 
 ### Installation
 
@@ -137,6 +149,12 @@ cd meli-order-management
 
 ### Running the Application
 
+The application supports two environment profiles: **development** (default) and **production**.
+
+#### Development (Default)
+
+The development profile uses an H2 in-memory database and is configured as the default profile. This is the simplest way to run the application for local development and testing.
+
 **For Windows:**
 ```bash
 start.bat
@@ -149,6 +167,49 @@ chmod +x start.sh
 ```
 
 The application will start and be accessible at: **http://localhost:8080**
+
+**H2 Console Access:**
+
+You can access the H2 Console to view and query the database directly:
+
+- **URL:** http://localhost:8080/h2-console
+- **JDBC URL:** `jdbc:h2:mem:orderdb`
+- **Username:** `sa`
+- **Password:** `password`
+
+**Note:** The H2 Console is only available when running in development mode.
+
+#### Production
+
+The production profile uses a PostgreSQL database and requires additional configuration through environment variables for secure credential management.
+
+**Required Environment Variables:**
+
+- `DB_URL` - PostgreSQL JDBC connection URL (e.g., `jdbc:postgresql://localhost:5432/ordersdb`)
+- `DB_USER` - Database username
+- `DB_PASSWORD` - Database password
+
+**Example for Windows (CMD):**
+
+```bash
+set SPRING_PROFILES_ACTIVE=prod
+set DB_URL=jdbc:postgresql://localhost:5432/ordersdb
+set DB_USER=your_username
+set DB_PASSWORD=your_password
+start.bat
+```
+
+**Example for Linux/macOS:**
+
+```bash
+export SPRING_PROFILES_ACTIVE=prod
+export DB_URL=jdbc:postgresql://localhost:5432/ordersdb
+export DB_USER=your_username
+export DB_PASSWORD=your_password
+./start.sh
+```
+
+**Note:** Ensure PostgreSQL is installed and running, and that the database specified in `DB_URL` exists before starting the application.
 
 ## API Documentation
 
@@ -226,7 +287,9 @@ The application will start and be accessible at: **http://localhost:8080**
 
 ## Database Access
 
-The application uses an H2 in-memory database for development purposes. You can access the H2 Console to view and query the database directly.
+### Development Environment
+
+The development environment uses an H2 in-memory database. You can access the H2 Console to view and query the database directly when running in development mode.
 
 **H2 Console Access:**
 
@@ -235,7 +298,11 @@ The application uses an H2 in-memory database for development purposes. You can 
 - **Username:** `sa`
 - **Password:** `password`
 
-**Note:** The H2 Console is only available when the application is running.
+**Note:** The H2 Console is only available when the application is running with the development profile.
+
+### Production Environment
+
+The production environment uses PostgreSQL for persistent data storage. Connect to your PostgreSQL instance using your preferred database client with the credentials configured in your environment variables.
 
 ## Testing with Postman
 
@@ -254,16 +321,13 @@ The collection includes pre-configured requests for all available endpoints with
 
 ## Roadmap
 
-### Sprint 2 (Coming Soon)
-- Environment profile configuration (development and production)
-- PostgreSQL database integration for production environment
-- Enhanced configuration management
-
 ### Sprint 3 (Planned)
 - Swagger/OpenAPI documentation integration
 - Comprehensive unit testing with JUnit
 - Integration testing suite
 - Enhanced error handling and validation
+- Docker containerization
+- CI/CD pipeline setup
 
 ---
 

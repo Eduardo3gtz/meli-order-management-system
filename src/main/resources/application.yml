@@ -9,3 +9,10 @@ spring:
   # Le decimos a Spring que si no le especificamos un perfil, active el de "dev"
   profiles:
     active: dev
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+  springdoc:  
+    packagesToScan: com.meli.ordermanagementsystem.controller

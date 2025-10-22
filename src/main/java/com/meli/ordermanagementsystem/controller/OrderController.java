@@ -3,7 +3,9 @@ package com.meli.ordermanagementsystem.controller;
 import com.meli.ordermanagementsystem.model.Order;
 import com.meli.ordermanagementsystem.service.OrderService; // Importamos el servicio
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
 import jakarta.validation.Valid;
 
 import java.util.List;
@@ -34,9 +36,18 @@ public class OrderController {
         return orderService.getAllOrders();
     }
 
-    @GetMapping("/{id}")
-    public Optional<Order> getOrderById(@PathVariable Long id) {
-        return orderService.getOrderById(id);
+   @GetMapping("/{id}")
+    public ResponseEntity<Order> getOrderById(@PathVariable Long id) {
+        Optional<Order> orderOptional = orderService.getOrderById(id);
+
+        // Verificamos si la orden fue encontrada
+        if (orderOptional.isPresent()) {
+            // Si sí, devolvemos la orden con un estado 200 OK
+            return ResponseEntity.ok(orderOptional.get());
+        } else {
+            // Si no, devolvemos un estado 404 Not Found
+            return ResponseEntity.notFound().build();
+        }
     }
 
    @PutMapping("/{id}")

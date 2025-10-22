@@ -16,15 +16,20 @@ A robust REST API solution for order management, developed as part of the "Sprin
     - [Development (Default)](#development-default)
     - [Production](#production)
 - [API Documentation](#api-documentation)
+  - [Interactive Documentation (Swagger UI)](#interactive-documentation-swagger-ui)
+  - [Endpoints](#endpoints)
+  - [Request Body Examples](#request-body-examples)
+  - [Response Examples](#response-examples)
+- [Unit Testing](#unit-testing)
 - [Database Access](#database-access)
 - [Testing with Postman](#testing-with-postman)
 - [Roadmap](#roadmap)
 
 ## Overview
 
-The MELI Order Management System is a Spring Boot application that provides a complete RESTful API for managing orders. Built with modern Java technologies and best practices, this system offers full CRUD operations with persistent data storage.
+The MELI Order Management System is a Spring Boot application that provides a complete RESTful API for managing orders. Built with modern Java technologies and best practices, this system offers full CRUD operations with persistent data storage, interactive API documentation, and comprehensive test coverage.
 
-**Current Version:** Sprint 2 - Multi-Environment Configuration
+**Current Version:** Sprint 3 - Production-Ready Application
 
 ## Tech Stack
 
@@ -38,6 +43,9 @@ The MELI Order Management System is a Spring Boot application that provides a co
 - **PostgreSQL** - Relational database for production
 - **YAML Configuration** - Environment profile management with `.yml` files
 - **Lombok** - Code generation and boilerplate reduction
+- **SpringDoc OpenAPI** - Automated API documentation generation
+- **JUnit 5** - Unit testing framework
+- **Mockito** - Mocking framework for isolated testing
 
 ## Features
 
@@ -60,10 +68,14 @@ The MELI Order Management System is a Spring Boot application that provides a co
 - ✅ YAML-based configuration management
 - ✅ Environment variable support for secure credential handling
 
+**Sprint 3 Completed:**
+
+- ✅ Swagger (OpenAPI) documentation integration
+- ✅ Unit tests for the service layer (JUnit & Mockito)
+
 ## Project Architecture
 
 The application follows a **three-layer architecture pattern** that separates concerns and promotes code maintainability:
-
 ```
 ┌─────────────────────────────────────────┐
 │         Controller Layer                │
@@ -190,7 +202,6 @@ The production profile uses a PostgreSQL database and requires additional config
 - `DB_PASSWORD` - Database password
 
 **Example for Windows (CMD):**
-
 ```bash
 set SPRING_PROFILES_ACTIVE=prod
 set DB_URL=jdbc:postgresql://localhost:5432/ordersdb
@@ -200,7 +211,6 @@ start.bat
 ```
 
 **Example for Linux/macOS:**
-
 ```bash
 export SPRING_PROFILES_ACTIVE=prod
 export DB_URL=jdbc:postgresql://localhost:5432/ordersdb
@@ -212,6 +222,26 @@ export DB_PASSWORD=your_password
 **Note:** Ensure PostgreSQL is installed and running, and that the database specified in `DB_URL` exists before starting the application.
 
 ## API Documentation
+
+### Interactive Documentation (Swagger UI)
+
+The project integrates **springdoc-openapi** to automatically generate comprehensive, interactive API documentation based on the OpenAPI 3 specification. This documentation is generated directly from the application's code, annotations, and validation constraints, ensuring it always stays in sync with the actual API implementation.
+
+**Access Swagger UI:**
+
+Once the application is running, navigate to:
+
+**http://localhost:8080/swagger-ui/index.html**
+
+**Features:**
+
+- **Explore all available endpoints** with detailed descriptions
+- **View request and response models** including all fields, data types, and validation rules
+- **Execute API calls directly from the browser** to test endpoints in real-time
+- **See example request/response payloads** for each operation
+- **Understand error responses** and status codes
+
+The Swagger UI provides an intuitive interface for developers to understand and interact with the API without needing external tools, making it ideal for both development and integration purposes.
 
 ### Endpoints
 
@@ -285,6 +315,41 @@ export DB_PASSWORD=your_password
 }
 ```
 
+## Unit Testing
+
+The service layer (`OrderServiceImpl`) is covered by a comprehensive suite of unit tests built with **JUnit 5** and **Mockito**. These tests ensure the correctness and reliability of all business logic operations.
+
+**Key Testing Characteristics:**
+
+- **Isolated Testing:** Tests run in complete isolation by mocking the repository layer using Mockito, ensuring tests focus solely on service layer logic without database dependencies
+- **Comprehensive Coverage:** All CRUD operations are thoroughly tested, including both success scenarios and failure cases
+- **Edge Case Validation:** Tests verify proper handling of exceptional situations, such as attempting to retrieve, update, or delete orders with non-existent IDs
+- **Fast Execution:** Unit tests run quickly without requiring application startup or database connections, enabling rapid feedback during development
+
+**Test Location:**
+
+All unit tests are located in the `src/test/java` directory, following standard Maven project structure conventions.
+
+**Running Tests:**
+
+Execute the test suite using Maven:
+```bash
+mvn test
+```
+
+Or run tests directly from your IDE's test runner (IntelliJ IDEA, Eclipse, VS Code, etc.).
+
+**Test Coverage Includes:**
+
+- Creating new orders with valid data
+- Retrieving all orders from the repository
+- Finding specific orders by ID (both existing and non-existent)
+- Updating existing orders with new data
+- Deleting orders by ID
+- Proper exception handling for invalid operations
+
+The unit testing strategy ensures that the business logic layer remains robust, maintainable, and resistant to regressions as the application evolves.
+
 ## Database Access
 
 ### Development Environment
@@ -321,13 +386,41 @@ The collection includes pre-configured requests for all available endpoints with
 
 ## Roadmap
 
-### Sprint 3 (Planned)
-- Swagger/OpenAPI documentation integration
-- Comprehensive unit testing with JUnit
+### Sprint 1 (Completed)
+- Spring Boot project setup with Maven
+- RESTful API implementation with CRUD operations
+- Three-layer architecture implementation
+- H2 database integration
+- Input validation and global exception handling
+
+### Sprint 2 (Completed)
+- Multi-environment configuration (development and production)
+- PostgreSQL integration for production
+- YAML-based configuration management
+- Secure credential handling with environment variables
+
+### Sprint 3 (Completed)
+- Swagger/OpenAPI interactive documentation
+- Comprehensive unit testing suite with JUnit and Mockito
+
+### Project Status: **Production-Ready**
+
+The MELI Order Management System has successfully completed all planned sprints and is now a production-ready application featuring:
+
+- Robust three-layer architecture with clear separation of concerns
+- Complete CRUD functionality with input validation and error handling
+- Multi-environment support for development and production deployments
+- Interactive API documentation for easy integration
+- Comprehensive test coverage ensuring code reliability
+
+**Future Enhancement Opportunities:**
+
 - Integration testing suite
-- Enhanced error handling and validation
-- Docker containerization
-- CI/CD pipeline setup
+- Docker containerization for simplified deployment
+- CI/CD pipeline automation
+- Performance optimization and caching strategies
+- Advanced features (pagination, filtering, sorting)
+- Authentication and authorization
 
 ---
 
